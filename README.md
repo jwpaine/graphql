@@ -29,6 +29,7 @@ This query fetches metadata, theme colors, page content for the home page, and a
   }
   ping(domain: "domain2")
 }
+```
 
 **Response:**
 
