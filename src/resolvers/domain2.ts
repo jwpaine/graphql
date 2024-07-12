@@ -22,6 +22,10 @@ export default {
       Query: {
         ping: (): string => 'pong for domain2 home page',
       },
+    },
+    custom: {
+      title: 'Custom Orders',
+      foo: "bar",
     }
   }
 };

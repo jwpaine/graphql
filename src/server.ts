@@ -34,6 +34,7 @@ const typeDefs = `#graphql
   type PageContent {
     title: String
     hero: Hero
+    foo: String
   }
 
   type Hero {

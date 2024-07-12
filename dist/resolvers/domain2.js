@@ -22,6 +22,10 @@ exports.default = {
             Query: {
                 ping: () => 'pong for domain2 home page',
             },
+        },
+        custom: {
+            title: 'Custom Orders',
+            foo: "bar",
         }
     }
 };
