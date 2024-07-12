@@ -10,29 +10,60 @@ import { resolversData } from './resolvers';
 // The GraphQL schema
 const typeDefs = `#graphql
   type Query {
-    hello: String
-    foo: String
-    domainMetadata(domain: String!): Metadata
+    metadata(domain: String!): Metadata
+    theme(domain: String!): Theme
+    pageContent(domain: String!, page: String!): PageContent
+    ping(domain: String!): String
   }
 
   type Metadata {
+    vid: String
     siteName: String
-    foo: String
+    title: String
+  }
+
+  type Theme {
+    colors: Colors
+  }
+
+  type Colors {
+    primary: String
+    secondary: String
+  }
+
+  type PageContent {
+    title: String
+    hero: Hero
+  }
+
+  type Hero {
+    image: String
   }
 `;
 
 // Merging all domain resolvers into a single set of resolvers
 const mergedResolvers = {
   Query: {
-    domainMetadata: (_: unknown, { domain }: { domain: string }) => resolversData[domain]?.metadata || null,
+    metadata: (_: unknown, { domain }: { domain: string }) => resolversData[domain]?.metadata || null,
+    theme: (_: unknown, { domain }: { domain: string }) => resolversData[domain]?.theme || null,
+    pageContent: (_: unknown, { domain, page }: { domain: string, page: string }) => resolversData[domain]?.pages[page] || null,
+    ping: (_: unknown, { domain }: { domain: string }) => resolversData[domain]?.pages.home.Query.ping() || null,
   },
 };
-
+/*
+  dynamically marge page-specific queries (each page can have its own set of query resolvers defined under pageResolvers[page].Query). 
+  These need to be incorporated into the main mergedResolvers.Query object.
+*/
 for (const domain in resolversData) {
-  mergedResolvers.Query = {
-    ...mergedResolvers.Query,
-    ...resolversData[domain].resolvers.Query,
-  };
+  const pageResolvers = resolversData[domain].pages;
+  for (const page in pageResolvers) {
+    if (pageResolvers[page].Query) {
+      mergedResolvers.Query = {
+        ...mergedResolvers.Query,
+        ...pageResolvers[page].Query,
+      };
+    }
+  }
 }
 
 const app = express();

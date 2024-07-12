@@ -1,9 +1,12 @@
-import { domain1 } from './domain1';
-import { domain2 } from './domain2';
+import domain1 from './domain1';
+import domain2 from './domain2';
 
 interface DomainResolvers {
-  metadata: { [key: string]: any };
-  resolvers: { Query: { [key: string]: () => any } };
+    metadata: { [key: string]: any };
+    theme: { [key: string]: any };
+    pages: { [key: string]: any };
+    // resolvers: { Query: { [key: string]: () => any } }
+  
 }
 
 export const resolversData: { [key: string]: DomainResolvers } = {
