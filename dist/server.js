@@ -55,7 +55,7 @@ const mergedResolvers = {
     },
 };
 /*
-  dynamically marge page-specific queries (each page can have its own set of query resolvers defined under pageResolvers[page].Query).
+  dynamically merge page-specific queries (each page can have its own set of query resolvers defined under pageResolvers[page].Query).
   These need to be incorporated into the main mergedResolvers.Query object.
 */
 for (const domain in resolvers_1.resolversData) {
@@ -71,6 +71,18 @@ for (const domain in resolvers_1.resolversData) {
 }
 const app = (0, express_1.default)();
 const httpServer = http_1.default.createServer(app);
+// Apply body-parser middleware before the custom logging middleware
+app.use(body_parser_1.default.json());
+// Custom middleware to log incoming GraphQL queries
+// app.use((req, res, next) => {
+//   console.log('Request received:', req.method, req.url); // Log request method and URL to verify middleware is hit
+//   if (req.body && req.body.query) {
+//     console.log('Incoming GraphQL Query:', req.body.query);
+//   } else {
+//     console.log('No GraphQL query found in the request body');
+//   }
+//   next();
+// });
 // Set up Apollo Server
 const server = new server_1.ApolloServer({
     typeDefs,
@@ -79,7 +91,7 @@ const server = new server_1.ApolloServer({
 });
 (async () => {
     await server.start();
-    app.use((0, cors_1.default)(), body_parser_1.default.json(), (0, express4_1.expressMiddleware)(server));
+    app.use((0, cors_1.default)(), (0, express4_1.expressMiddleware)(server));
     await new Promise((resolve) => httpServer.listen({ port: 4000 }, () => resolve()));
     console.log(`🚀 Server ready at http://localhost:4000`);
 })();

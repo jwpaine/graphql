@@ -1,4 +1,4 @@
-import domain1 from './domain1';
+import base from './base';
 import domain2 from './domain2';
 
 interface DomainResolvers {
@@ -10,6 +10,6 @@ interface DomainResolvers {
 }
 
 export const resolversData: { [key: string]: DomainResolvers } = {
-  domain1: domain1,
+  base: base,
   domain2: domain2,
 };

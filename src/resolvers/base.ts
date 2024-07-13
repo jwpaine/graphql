@@ -8,7 +8,7 @@ export default {
   },
   theme: {
     colors: {
-      primary: '#FF5733',
+      primary: '#00FFFF',
       secondary: '#33FF57',
     },
   },
